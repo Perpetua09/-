@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>储水种植箱分类大作战｜五年级RBT</title>
+<style>
+:root{
+  --ink:#2b4757;
+  --yellow:#ffd76a;
+  --sky:#dff5ff;
+  --mint:#e4f8dc;
+  --lav:#f0e7ff;
+  --peach:#ffe8c8;
+  --rose:#ffe2ec;
+  --ok:#cdf5d4;
+  --bad:#ffd4d4;
+  --white:#fff;
+  --shadow:0 10px 28px rgba(47,79,95,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 9%,#fff2ad 0 7%,transparent 7.5%),
+    radial-gradient(circle at 92% 14%,#d8f7ff 0 8%,transparent 8.5%),
+    radial-gradient(circle at 12% 86%,#e6f7db 0 8%,transparent 8.5%),
+    linear-gradient(135deg,#fffaf0,#eefaff);
+  min-height:100vh;
+}
+.wrap{max-width:1180px;margin:auto;padding:22px 16px 44px}
+.card{
+  background:rgba(255,255,255,.94);
+  border:3px solid rgba(255,255,255,.96);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-bottom:18px;
+}
+.hero{
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero:before,.hero:after{
+  content:"";
+  position:absolute;
+  width:110px;height:110px;
+  border-radius:50%;
+  opacity:.22;
+}
+.hero:before{background:#ffd166;left:-35px;top:-42px}
+.hero:after{background:#8bd3dd;right:-35px;bottom:-45px}
+.badge{
+  display:inline-block;
+  background:#eff8ff;
+  border:2px solid #c8e6f2;
+  padding:6px 13px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+h1{
+  margin:0 0 8px;
+  font-size:clamp(30px,5vw,52px);
+  line-height:1.15;
+}
+.sub{font-size:18px;margin:0;line-height:1.6}
+.lesson{
+  margin:14px auto 0;
+  max-width:820px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.lesson div{
+  background:#fff;
+  border-radius:15px;
+  padding:10px;
+  box-shadow:0 5px 14px rgba(40,70,90,.09);
+  font-size:14px;
+}
+.startbox{
+  max-width:720px;
+  margin:18px auto 0;
+  background:linear-gradient(135deg,#fff9d7,#ebf8ff);
+  border-radius:22px;
+  padding:18px;
+}
+.login{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
+}
+input,select{
+  width:100%;
+  padding:13px 14px;
+  border-radius:14px;
+  border:2px solid #cbe1ea;
+  font-size:17px;
+  background:#fff;
+  color:var(--ink);
+}
+.login button{grid-column:1/-1}
+.rulebox{
+  margin-top:15px;
+  text-align:left;
+  background:#fff;
+  padding:14px 16px;
+  border-radius:16px;
+  line-height:1.7;
+}
+.rulebox b{color:#d97706}
+.status{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:15px;
+}
+.pill{
+  background:#fff;
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:800;
+  box-shadow:var(--shadow);
+}
+.instructions{
+  text-align:center;
+  line-height:1.7;
+  font-size:17px;
+  margin-bottom:14px;
+}
+.stage-title{
+  display:inline-block;
+  padding:7px 14px;
+  background:#fff4bd;
+  border-radius:999px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.bank{
+  display:flex;
+  flex-wrap:wrap;
+  gap:11px;
+  justify-content:center;
+  min-height:110px;
+  background:#ffffffb8;
+  border:3px dashed #a9c9d7;
+  border-radius:20px;
+  padding:14px;
+}
+.item{
+  cursor:grab;
+  user-select:none;
+  background:#fff;
+  border:3px solid #fff;
+  border-radius:17px;
+  padding:11px 15px;
+  font-size:18px;
+  font-weight:800;
+  box-shadow:0 5px 14px rgba(40,70,90,.12);
+  transition:.18s;
+}
+.item:hover{transform:translateY(-3px)}
+.item.selected{outline:4px solid #ffad33;transform:scale(1.04)}
+.item.dragging{opacity:.45}
+.zones{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+  margin-top:16px;
+}
+.zone{
+  min-height:170px;
+  border-radius:23px;
+  padding:14px;
+  border:3px dashed transparent;
+  box-shadow:var(--shadow);
+  transition:.2s;
+}
+.zone h3{text-align:center;font-size:23px;margin:0 0 7px}
+.hint{text-align:center;font-size:13px;opacity:.75;margin-bottom:9px}
+.zone[data-cat="材料"]{background:#fff0c9}
+.zone[data-cat="工具"]{background:#dff3ff}
+.zone[data-cat="种植介质"]{background:#e6f8df}
+.zone[data-cat="储水箱部件"]{background:#efe5ff}
+.zone[data-cat="毛细颗粒"]{background:#ffe8cc}
+.zone[data-cat="基质"]{background:#e1f4dd}
+.zone.over{border-color:#ff9f1c;transform:scale(1.01)}
+.droparea{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.controls{
+  display:flex;
+  gap:11px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:17px;
+}
+button{
+  border:0;
+  border-radius:15px;
+  padding:12px 19px;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+}
+.primary{background:var(--yellow)}
+.secondary{background:#fff}
+.next{background:#b9edbf}
+.info{background:#cfeaff}
+.msg{
+  text-align:center;
+  min-height:30px;
+  margin-top:14px;
+  font-size:20px;
+  font-weight:900;
+}
+.correct{background:var(--ok)!important}
+.wrong{background:var(--bad)!important;animation:shake .35s}
+.hidden{display:none!important}
+.result{
+  text-align:center;
+  background:linear-gradient(135deg,#fff6c8,#e3f8ff);
+}
+.scorebig{font-size:64px;font-weight:1000;margin:8px 0}
+.resultgrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  max-width:760px;
+  margin:18px auto;
+}
+.resultbox{
+  background:#fff;
+  border-radius:18px;
+  padding:15px;
+  box-shadow:var(--shadow);
+}
+.resultbox b{display:block;font-size:25px;margin-top:5px}
+.submittext{
+  text-align:left;
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  line-height:1.65;
+  max-width:760px;
+  margin:16px auto;
+  white-space:pre-wrap;
+  border:2px dashed #afd2df;
+}
+.screenshot{
+  max-width:760px;
+  margin:16px auto 0;
+  background:#fff7db;
+  border-left:8px solid #ffd166;
+  border-radius:16px;
+  padding:14px 16px;
+  line-height:1.65;
+}
+.footer{
+  text-align:center;
+  font-size:13px;
+  opacity:.72;
+  margin-top:12px;
+}
+.star{
+  position:fixed;
+  pointer-events:none;
+  font-size:28px;
+  animation:pop 1s ease forwards;
+}
+@keyframes pop{
+  0%{transform:translate(0,0) scale(.5);opacity:0}
+  20%{opacity:1}
+  100%{transform:translate(var(--x),var(--y)) scale(1.5) rotate(25deg);opacity:0}
+}
+@keyframes shake{
+  25%{transform:translateX(-6px)}
+  50%{transform:translateX(6px)}
+  75%{transform:translateX(-4px)}
+}
+@media(max-width:760px){
+  .login,.zones,.resultgrid,.lesson{grid-template-columns:1fr}
+  .item{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="card hero" id="startScreen">
+  <span class="badge">五年级 RBT · Teknologi Pertanian Bandar</span>
+  <h1>🌱 储水种植箱分类大作战</h1>
+  <p class="sub">认识、分类，再成为储水种植小专家！</p>
+
+  <div class="lesson">
+    <div>🧱 认识材料</div>
+    <div>🛠️ 分辨工具</div>
+    <div>🌿 认识种植介质</div>
+  </div>
+
+  <div class="startbox">
+    <b style="font-size:20px">学生登录</b>
+    <div class="login">
+      <input id="studentName" placeholder="输入姓名" maxlength="40">
+      <select id="studentClass">
+        <option value="">选择班级</option>
+        <option>5H</option>
+        <option>5J</option>
+      </select>
+      <button class="primary" id="startBtn">🚀 开始挑战</button>
+    </div>
+
+    <div class="rulebox">
+      <b>游戏规则：</b><br>
+      ① 第一关：把物品分成材料、工具、种植介质和储水箱部件。<br>
+      ② 第二关：把种植介质再分成毛细颗粒和基质。<br>
+      ③ 完成后请截图成绩，并上传到 Google Classroom。
+    </div>
+  </div>
+  <div class="msg" id="startMsg"></div>
+</section>
+
+<section class="hidden" id="gameArea">
+
+  <section class="card hero">
+    <span class="badge">正在挑战</span>
+    <h1>🌱 储水种植箱分类大作战</h1>
+    <p class="sub"><span id="playerLabel"></span>，加油！</p>
+    <div class="status">
+      <div class="pill">🎯 第 <span id="stageNum">1</span> 关</div>
+      <div class="pill">⭐ 本关得分：<span id="score">0</span></div>
+      <div class="pill">🧩 已完成：<span id="doneCount">0</span>/<span id="totalCount">0</span></div>
+    </div>
+  </section>
+
+  <section class="card" id="stage1">
+    <div class="instructions">
+      <span class="stage-title">第一关：帮老师整理工作台！</span><br>
+      把每张卡片放到正确类别。<br>
+      <small>电脑：拖动卡片｜手机/平板：先点卡片，再点分类框</small>
+    </div>
+
+    <div class="bank" id="bank1"></div>
+
+    <div class="zones">
+      <div class="zone" data-cat="材料">
+        <h3>🧱 材料</h3>
+        <div class="hint">制作储水种植箱所需要的材料</div>
+        <div class="droparea"></div>
+      </div>
+
+      <div class="zone" data-cat="工具">
+        <h3>🛠️ 工具</h3>
+        <div class="hint">帮助我们进行制作</div>
+        <div class="droparea"></div>
+      </div>
+
+      <div class="zone" data-cat="种植介质">
+        <h3>🌿 种植介质</h3>
+        <div class="hint">植物生长所使用的介质</div>
+        <div class="droparea"></div>
+      </div>
+
+      <div class="zone" data-cat="储水箱部件">
+        <h3>💧 储水箱部件</h3>
+        <div class="hint">储水种植箱的重要结构</div>
+        <div class="droparea"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="check1">✅ 检查答案</button>
+      <button class="secondary" id="reset1">🔄 重新挑战</button>
+      <button class="next hidden" id="next1">➡️ 进入第二关</button>
+    </div>
+    <div class="msg" id="msg1"></div>
+  </section>
+
+  <section class="card hidden" id="stage2">
+    <div class="instructions">
+      <span class="stage-title">第二关：种植介质再分类！</span><br>
+      请把种植介质分成“毛细颗粒”和“基质”。
+    </div>
+
+    <div class="bank" id="bank2"></div>
+
+    <div class="zones">
+      <div class="zone" data-cat="毛细颗粒">
+        <h3>🟤 毛细颗粒</h3>
+        <div class="hint">具有毛细作用的颗粒材料</div>
+        <div class="droparea"></div>
+      </div>
+
+      <div class="zone" data-cat="基质">
+        <h3>🌱 基质</h3>
+        <div class="hint">供植物根部生长的介质</div>
+        <div class="droparea"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="check2">✅ 检查答案</button>
+      <button class="secondary" id="reset2">🔄 重新挑战</button>
+      <button class="next hidden" id="finishBtn">🏁 查看成绩</button>
+    </div>
+    <div class="msg" id="msg2"></div>
+  </section>
+
+</section>
+
+<section class="card result hidden" id="resultScreen">
+  <span class="badge">挑战完成</span>
+  <h1>🎉 恭喜完成！</h1>
+  <div id="resultName" style="font-size:22px;font-weight:900"></div>
+  <div class="scorebig"><span id="finalScore"></span>%</div>
+
+  <div class="resultgrid">
+    <div class="resultbox">第一关<b id="r1"></b></div>
+    <div class="resultbox">第二关<b id="r2"></b></div>
+    <div class="resultbox">总答对<b id="rtotal"></b></div>
+  </div>
+
+  <div class="submittext" id="submissionText"></div>
+
+  <div class="screenshot">
+    📸 <b>请截图这个成绩页面</b><br>
+    截图必须看得到：姓名、班级、总分和完成时间。<br>
+    完成后上传到老师指定的 Google Classroom 作业。
+  </div>
+
+  <div class="controls">
+    <button class="info" id="copyBtn">📋 复制成绩资料</button>
+    <button class="primary" id="downloadBtn">📄 下载成绩记录</button>
+    <button class="secondary" id="playAgain">🔄 再玩一次</button>
+  </div>
+</section>
+
+<div class="footer">五年级 RBT · 7.1.5 储水种植系统学习活动</div>
+</div>
+
+<script>
+const stage1Items = [
+["塑料桶","材料"],["PVC管","材料"],["沥水篮","材料"],["纱布","材料"],
+["橡皮筋","材料"],["铁丝","材料"],["泡沫塑料","材料"],["塑料板","材料"],
+["剪刀","工具"],["手工刀","工具"],["电钻","工具"],["钢卷尺","工具"],["卡尺","工具"],["记号笔","工具"],
+["陶粒","种植介质"],["油棕仁壳","种植介质"],["泥炭苔","种植介质"],["蛭石","种植介质"],["珍珠岩","种植介质"],
+["主盆","储水箱部件"],["溢水孔","储水箱部件"],["储水箱","储水箱部件"],["灌水管","储水箱部件"],["水位计","储水箱部件"]
+];
+
+const stage2Items = [
+["陶粒","毛细颗粒"],["油棕仁壳","毛细颗粒"],
+["泥炭苔","基质"],["蛭石","基质"],["珍珠岩","基质"]
+];
+
+let selected=null;
+let scores={1:0,2:0};
+let student={name:"",cls:""};
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+
+function makeCard(name,cat){
+  const el=document.createElement("div");
+  el.className="item";
+  el.textContent=name;
+  el.draggable=true;
+  el.dataset.answer=cat;
+
+  el.addEventListener("dragstart",()=>{
+    selected=el;
+    el.classList.add("dragging");
+  });
+
+  el.addEventListener("dragend",()=>{
+    el.classList.remove("dragging");
+  });
+
+  el.addEventListener("click",()=>{
+    document.querySelectorAll(".item").forEach(x=>x.classList.remove("selected"));
+    selected=el;
+    el.classList.add("selected");
+  });
+
+  return el;
+}
+
+function setupStage(stage){
+  const data=stage===1?stage1Items:stage2Items;
+  const root=document.getElementById("stage"+stage);
+  const bank=document.getElementById("bank"+stage);
+
+  bank.innerHTML="";
+  root.querySelectorAll(".droparea").forEach(x=>x.innerHTML="");
+
+  shuffle(data).forEach(([n,c])=>bank.appendChild(makeCard(n,c)));
+
+  root.querySelectorAll(".zone").forEach(zone=>{
+    zone.classList.remove("over");
+
+    zone.ondragover=e=>{
+      e.preventDefault();
+      zone.classList.add("over");
+    };
+
+    zone.ondragleave=()=>zone.classList.remove("over");
+
+    zone.ondrop=e=>{
+      e.preventDefault();
+      zone.classList.remove("over");
+      if(selected){
+        zone.querySelector(".droparea").appendChild(selected);
+        selected.classList.remove("selected");
+        selected=null;
+        updateDone(stage);
+      }
+    };
+
+    zone.onclick=e=>{
+      if(selected && !e.target.classList.contains("item")){
+        zone.querySelector(".droparea").appendChild(selected);
+        selected.classList.remove("selected");
+        selected=null;
+        updateDone(stage);
+      }
+    };
+  });
+
+  document.getElementById("totalCount").textContent=data.length;
+  document.getElementById("score").textContent="0";
+  document.getElementById("doneCount").textContent="0";
+  document.getElementById("msg"+stage).textContent="";
+
+  if(stage===1) document.getElementById("next1").classList.add("hidden");
+  if(stage===2) document.getElementById("finishBtn").classList.add("hidden");
+
+  scores[stage]=0;
+}
+
+function updateDone(stage){
+  const root=document.getElementById("stage"+stage);
+  document.getElementById("doneCount").textContent=root.querySelectorAll(".zone .item").length;
+}
+
+function checkStage(stage){
+  const root=document.getElementById("stage"+stage);
+  const data=stage===1?stage1Items:stage2Items;
+  const placed=[...root.querySelectorAll(".zone .item")];
+
+  if(placed.length<data.length){
+    document.getElementById("msg"+stage).textContent="还有卡片没有分类哦！继续加油 💪";
+    return;
+  }
+
+  let correct=0;
+
+  root.querySelectorAll(".zone").forEach(zone=>{
+    const cat=zone.dataset.cat;
+
+    zone.querySelectorAll(".item").forEach(item=>{
+      item.classList.remove("correct","wrong");
+
+      if(item.dataset.answer===cat){
+        correct++;
+        item.classList.add("correct");
+      }else{
+        item.classList.add("wrong");
+      }
+    });
+  });
+
+  scores[stage]=correct;
+  document.getElementById("score").textContent=correct;
+
+  const msg=document.getElementById("msg"+stage);
+
+  if(correct===data.length){
+    msg.textContent="🎉 全部正确！你是储水种植小专家！";
+    celebrate();
+
+    if(stage===1){
+      document.getElementById("next1").classList.remove("hidden");
+    }else{
+      document.getElementById("finishBtn").classList.remove("hidden");
+    }
+  }else{
+    msg.textContent=`答对 ${correct}/${data.length}。红色卡片需要再想一想！`;
+  }
+}
+
+function celebrate(){
+  const icons=["⭐","🌟","🌱","💧","🎉"];
+
+  for(let i=0;i<28;i++){
+    const s=document.createElement("div");
+    s.className="star";
+    s.textContent=icons[Math.floor(Math.random()*icons.length)];
+    s.style.left=(20+Math.random()*60)+"vw";
+    s.style.top=(25+Math.random()*40)+"vh";
+    s.style.setProperty("--x",(Math.random()*260-130)+"px");
+    s.style.setProperty("--y",(Math.random()*220-160)+"px");
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  }
+}
+
+function finishGame(){
+  const totalCorrect=scores[1]+scores[2];
+  const total=stage1Items.length+stage2Items.length;
+  const pct=Math.round(totalCorrect/total*100);
+  const now=new Date();
+  const stamp=now.toLocaleString("zh-MY",{hour12:false});
+
+  document.getElementById("gameArea").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+
+  document.getElementById("resultName").textContent=`${student.name} · ${student.cls}`;
+  document.getElementById("finalScore").textContent=pct;
+  document.getElementById("r1").textContent=`${scores[1]}/${stage1Items.length}`;
+  document.getElementById("r2").textContent=`${scores[2]}/${stage2Items.length}`;
+  document.getElementById("rtotal").textContent=`${totalCorrect}/${total}`;
+
+  const txt=
+`《储水种植箱分类大作战》成绩记录
+姓名：${student.name}
+班级：${student.cls}
+第一关：${scores[1]}/${stage1Items.length}
+第二关：${scores[2]}/${stage2Items.length}
+总分：${pct}%
+完成时间：${stamp}`;
+
+  document.getElementById("submissionText").textContent=txt;
+  window.submissionTextValue=txt;
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.getElementById("startBtn").onclick=()=>{
+  const name=document.getElementById("studentName").value.trim();
+  const cls=document.getElementById("studentClass").value;
+
+  if(!name || !cls){
+    document.getElementById("startMsg").textContent="请先填写姓名和选择班级 😊";
+    return;
+  }
+
+  student={name,cls};
+  document.getElementById("playerLabel").textContent=`${name}（${cls}）`;
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("gameArea").classList.remove("hidden");
+  document.getElementById("stageNum").textContent="1";
+
+  setupStage(1);
+};
+
+document.getElementById("check1").onclick=()=>checkStage(1);
+document.getElementById("reset1").onclick=()=>setupStage(1);
+document.getElementById("check2").onclick=()=>checkStage(2);
+document.getElementById("reset2").onclick=()=>setupStage(2);
+
+document.getElementById("next1").onclick=()=>{
+  document.getElementById("stage1").classList.add("hidden");
+  document.getElementById("stage2").classList.remove("hidden");
+  document.getElementById("stageNum").textContent="2";
+  setupStage(2);
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+document.getElementById("finishBtn").onclick=finishGame;
+
+document.getElementById("copyBtn").onclick=async()=>{
+  try{
+    await navigator.clipboard.writeText(window.submissionTextValue||"");
+    alert("成绩资料已复制！");
+  }catch(e){
+    alert("无法自动复制，请长按成绩记录手动复制。");
+  }
+};
+
+document.getElementById("downloadBtn").onclick=()=>{
+  const blob=new Blob([window.submissionTextValue||""],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`${student.cls}_${student.name}_储水种植箱成绩.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+document.getElementById("playAgain").onclick=()=>location.reload();
+</script>
+</body>
+</html>
